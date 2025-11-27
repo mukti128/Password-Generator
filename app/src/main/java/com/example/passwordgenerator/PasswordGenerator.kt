@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,35 +14,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-fun GeneratePassword(
+fun generatePassword(
     length: Int,
     isUpperCaseLetter: Boolean,
     isLowerCaseLetter: Boolean,
@@ -53,15 +48,17 @@ fun GeneratePassword(
     val number = "1234567890"
     val symbols = "!@#$%^&*()-_=+[]{}|;:'\",.<>?/`~"
 
-    val addPass = ""
-    if (isUpperCaseLetter == true) addPass + upperCaseLetter
-    if (isLowerCaseLetter == true) addPass + lowerCaseLetter
-    if (isNumber == true) addPass + number
-    if (isSymbols == true) addPass + symbols
+    var addPass = ""
+    if (isUpperCaseLetter) addPass += upperCaseLetter
+    if (isLowerCaseLetter) addPass += lowerCaseLetter
+    if (isNumber) addPass += number
+    if (isSymbols) addPass += symbols
+
+    if (addPass.isEmpty()) return ""
 
     return (1..length)
         .map { addPass.random() }
-        .joinToString()
+        .joinToString("")
 }
 
 @Composable
@@ -80,7 +77,6 @@ fun PasswordGeneratorScreen() {
         Card(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -100,7 +96,8 @@ fun PasswordGeneratorScreen() {
                 ) {
                     OutlinedTextField(
                         value = password,
-                        onValueChange = {password = it},
+                        onValueChange = {},
+                        readOnly = true,
                         modifier = Modifier
                             .width(200.dp)
                     )
@@ -108,7 +105,15 @@ fun PasswordGeneratorScreen() {
                     Spacer(modifier = Modifier.width(12.dp))
 
                     Button(
-                        onClick = {}
+                        onClick = {
+                            password = generatePassword(
+                                length = passwordLength.toIntOrNull() ?: 0,
+                                isUpperCaseLetter = isUpperCaseLetter,
+                                isLowerCaseLetter = isLowerCaseLetter,
+                                isNumber = isNumber,
+                                isSymbols = isSymbols,
+                            )
+                        }
                     ) {
                         Text(
                             text = "Spin",
@@ -148,7 +153,7 @@ fun PasswordGeneratorScreen() {
                     )
 
                     Spacer(modifier = Modifier.width(16.dp))
-                    
+
                     Column(
                         modifier = Modifier
                     ) {
@@ -166,16 +171,18 @@ fun PasswordGeneratorScreen() {
                                     contentColor = Color.Black
                                 ),
                                 elevation = null,
-                                modifier = Modifier.size(30.dp)
+                                contentPadding = PaddingValues(0.dp),
+                                modifier = Modifier.size(40.dp)
                             ) {
                                 if (isUpperCaseLetter) {
                                     Icon(
                                         imageVector = Icons.Default.Check,
                                         contentDescription = null,
-                                        modifier = Modifier.size(36.dp)
+                                        tint = Color.Black,
+                                        modifier = Modifier.fillMaxSize()
                                     )
                                 } else {
-
+                                    // TODO
                                 }
                             }
 
@@ -202,16 +209,18 @@ fun PasswordGeneratorScreen() {
                                     contentColor = Color.Black
                                 ),
                                 elevation = null,
-                                modifier = Modifier.size(30.dp)
+                                contentPadding = PaddingValues(0.dp),
+                                modifier = Modifier.size(40.dp)
                             ) {
                                 if (isLowerCaseLetter) {
                                     Icon(
                                         imageVector = Icons.Default.Check,
                                         contentDescription = null,
-                                        modifier = Modifier.size(36.dp)
+                                        tint = Color.Black,
+                                        modifier = Modifier.fillMaxSize()
                                     )
                                 } else {
-
+                                    // TODO
                                 }
                             }
 
@@ -238,16 +247,18 @@ fun PasswordGeneratorScreen() {
                                     contentColor = Color.Black
                                 ),
                                 elevation = null,
-                                modifier = Modifier.size(30.dp)
+                                contentPadding = PaddingValues(0.dp),
+                                modifier = Modifier.size(40.dp)
                             ) {
                                 if (isNumber) {
                                     Icon(
                                         imageVector = Icons.Default.Check,
                                         contentDescription = null,
-                                        modifier = Modifier.size(36.dp)
+                                        tint = Color.Black,
+                                        modifier = Modifier.fillMaxSize()
                                     )
                                 } else {
-
+                                    // TODO
                                 }
                             }
 
@@ -274,16 +285,18 @@ fun PasswordGeneratorScreen() {
                                     contentColor = Color.Black
                                 ),
                                 elevation = null,
-                                modifier = Modifier.size(30.dp)
+                                contentPadding = PaddingValues(0.dp),
+                                modifier = Modifier.size(40.dp)
                             ) {
                                 if (isSymbols) {
                                     Icon(
                                         imageVector = Icons.Default.Check,
                                         contentDescription = null,
-                                        modifier = Modifier.size(36.dp)
+                                        tint = Color.Black,
+                                        modifier = Modifier.fillMaxSize()
                                     )
                                 } else {
-
+                                    // TODO
                                 }
                             }
 
